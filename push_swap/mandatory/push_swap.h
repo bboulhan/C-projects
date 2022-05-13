@@ -24,7 +24,7 @@ typedef struct list
 }	t_stack;
 
 int		ft_atoi(const char *str);
-int		(int c);ft_isdigit
+int		ft_isdigit(int c);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 int		ft_strlen(const char *str);
 void	ft_lstadd_back(t_stack **lst, t_stack *new);

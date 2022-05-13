@@ -22,7 +22,7 @@ int main()
     struct timeval end;
 
     printf("%d\n",get_time());
-    // usleep(300);
+    // ft_usleep(300);
     // gettimeofday(&end, NULL);
     // printf(" %d  \n", end.tv_usec - start.tv_usec);
 }

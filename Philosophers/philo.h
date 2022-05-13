@@ -28,6 +28,7 @@ typedef struct s_sim
     int     		time_to_sleep;
     int     		number_of_philosophers;
     int     		cercle;
+	int				death;
 	char			*forks;
     int     		*i;
 }   t_sim;
@@ -42,9 +43,6 @@ typedef struct s_philosof
 	t_sim	*sim;
 }	t_philosof;
 
-
-
-
 int     check_args(int ac, char **av);
 int     ft_atoi(const char *str);
 int     ft_isdigit(int c);
@@ -56,8 +54,8 @@ char	*ft_strdup(const char *source);
 int	    set_philos(t_sim *ph);
 void	put_values(t_sim *p);
 int		ft_error(int Er);
-unsigned int	    get_time();
+int     get_time(struct timeval start);
 int		check_place(char *forks, int i);
-
+void	ft_usleep(int time);
 
 #endif

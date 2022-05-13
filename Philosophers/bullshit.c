@@ -34,7 +34,7 @@ void	*philo_life(void *arg)
 		{
 			//pthread_mutex_lock(&mutex);
 			printf("ibra\t%d\n", p->i[1]);
-			//usleep(500);
+			//ft_usleep(500);
 			p->i[1]++;
 			//sleep(1);
 			//pthread_mutex_unlock(&mutex);
@@ -51,11 +51,11 @@ void	*manager(void *arg)
 	while (1)
 	{
 		//printf("ib\n");
-		//usleep(1);
+		//ft_usleep(1);
 		//pthread_mutex_lock(&mutex);
 		if (p->i[3] % 10 != 9)
 			p->i[3]++;
-		//usleep(1);
+		//ft_usleep(1);
 		if (p->i[1] % 10 != 9)
 			p->i[1]++;
 		//pthread_mutex_unlock(&mutex);
@@ -74,7 +74,7 @@ void	*philo_life_2(void *arg)
 		{
 			//pthread_mutex_lock(&mutex);
 			printf("yes\t%d\n", p->i[3]);
-			//usleep(500);
+			//ft_usleep(500);
 			p->i[3]++;
 			//sleep(1);
 			//pthread_mutex_unlock(&mutex);

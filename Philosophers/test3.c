@@ -11,7 +11,7 @@ void    *h(void *j)
     philos = (t_philo *)j;
     i++;
     c = i;
-    usleep(200 * (philos[c].n_philos - c + 1));
+    ft_usleep(200 * (philos[c].n_philos - c + 1));
     gettimeofday(&start, NULL);
     while (1 && end.tv_usec - start.tv_usec < philos[c].t_die)
     {
@@ -25,7 +25,7 @@ void    *h(void *j)
         philos[c].n_forks++;
         gettimeofday(&start, NULL);
         printf("%d %d is eating\n", start.tv_usec, c + 1);
-        usleep(philos[c].t_eat);
+        ft_usleep(philos[c].t_eat);
         pthread_mutex_unlock(&philos[c].mutex);
         if (c == philos[c].n_philos)
             pthread_mutex_unlock(&philos[0].mutex);
@@ -36,7 +36,7 @@ void    *h(void *j)
             gettimeofday(&start, NULL);
             printf("%d %d is sleeping\n", start.tv_usec, c + 1);
             philos[c].n_forks--;
-            usleep(philos[c].t_sleep);
+            ft_usleep(philos[c].t_sleep);
         }
         printf("%d is thinking\n", c + 1);
         gettimeofday(&end, NULL);

@@ -12,13 +12,15 @@
 
 #include "philo.h"  
 
-void	put_values(t_sim *p)
+void	ft_usleep(int time)
 {
-	p->i[0] = 0;
-	p->i[1] = 1;
-	p->i[2] = 4;
-	p->i[3] = 6;
-	p->i[4] = 4;
+	struct timeval	start;
+	struct timeval	end;
+	
+	gettimeofday(&start, NULL);
+	gettimeofday(&end, NULL);
+	while ((useconds_t )(end.tv_usec - start.tv_usec <= time))
+		gettimeofday(&end, NULL);
 }
 
 int	ft_error(int Er)
@@ -30,12 +32,12 @@ int	ft_error(int Er)
 	return (1);
 }
 
-unsigned int	get_time()
+int	get_time(struct timeval start)
 {
-	struct timeval	current_time;
+	struct timeval	end;
 
-	gettimeofday(&current_time, NULL);
-	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
+	gettimeofday(&end, NULL);
+	return ((end.tv_sec * 1000 + end.tv_usec / 1000) - (start.tv_sec * 1000 + start.tv_usec / 1000));
 }
 
 int	check_place(char *forks, int i)
