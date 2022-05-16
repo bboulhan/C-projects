@@ -18,7 +18,7 @@ CC = cc
 
 HEADER = philo.h \
 
-FILES = check_args.c ft_itoa.c philosophers.c utils.c utils_2.c \
+FILES = check_and_init.c philosophers.c utils.c simulation.c \
 
 OBJS = $(FILES:%.c=%.o)
 

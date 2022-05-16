@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_args.c                                       :+:      :+:    :+:   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bboulhan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/17 20:04:29 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/04/17 20:04:39 by bboulhan         ###   ########.fr       */
+/*   Created: 2022/04/19 00:29:08 by bboulhan          #+#    #+#             */
+/*   Updated: 2022/04/19 00:29:21 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo.h"  
 
-void	free_all(char **two_dimen)
+void	put_values_2(t_sim *ph, t_philosof ***s)
 {
-	int	i;
+	t_philosof	**p;
+	int			i;
 
 	i = 0;
-	while (two_dimen[i])
+	p = *s;
+	while (i < ph->number_of_philosophers)
 	{
-		free(two_dimen[i]);
+		p[i]->philosof_number = i;
+		p[i]->sim = ph;
+		p[i]->number_of_meals = 0;
 		i++;
 	}
-	free(two_dimen);
+	*s = p;
 }
 
 void	set_sim(char **av, t_sim *ph, int ac)
@@ -34,21 +38,26 @@ void	set_sim(char **av, t_sim *ph, int ac)
 	ph->time_to_die = ft_atoi(av[i++]) * 1000;
 	ph->time_to_eat = ft_atoi(av[i++]) * 1000;
 	ph->time_to_sleep = ft_atoi(av[i++]) * 1000;
-	ph->death = 0;
 	ph->mutex = malloc(sizeof(pthread_mutex_t *) * ph->number_of_philosophers);
+	ph->meals_left = 0;
 	if (ac == 6)
-		ph->cercle = ft_atoi(av[i]);
+		ph->all_meals = ft_atoi(av[i]);
 	else
-		ph->cercle = -1;
+		ph->all_meals = 0;
 	i = 0;
-	ph->forks = ft_calloc(ph->number_of_philosophers + 1, 1);
 	while (i < ph->number_of_philosophers)
 	{
 		ph->mutex[i] = malloc(sizeof(pthread_mutex_t));
-		pthread_mutex_init(ph->mutex[i], NULL);
-		ph->forks[i++] = '1';
+		pthread_mutex_init(ph->mutex[i++], NULL);
 	}
-	ph->forks[i] = 0;
+}
+
+int	check_forks(int x, int y)
+{
+	if (x == y - 1)
+		return (0);
+	else
+		return (x + 1);
 }
 
 int	check_args(int ac, char **av)
@@ -58,7 +67,7 @@ int	check_args(int ac, char **av)
 
 	j = 0;
 	i = 1;
-	if (ft_atoi(av[1]) < 2 || ft_atoi(av[1]) > 200)
+	if (ft_atoi(av[1]) < 1)
 		return (0);
 	while (i < ac)
 	{

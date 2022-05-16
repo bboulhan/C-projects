@@ -49,49 +49,28 @@ int	ft_isdigit(int c)
 		return (0);
 }
 
-void	*ft_calloc(size_t num, size_t size)
+void	ft_usleep(int time)
 {
-	char	*x;
-	int		y;
-
-	y = num * size;
-	x = malloc(y);
-	if (!x)
-		return (NULL);
-	while (y--)
-		x[y] = 0;
-	return (x);
+	struct timeval	start;
+	
+	gettimeofday(&start, NULL);
+	while ((useconds_t )(get_time(start) * 1000 < time))
+		usleep(1);
 }
 
-size_t	ft_strlen(const char *str)
+int	get_time(struct timeval start)
 {
-	size_t	i;
+	struct timeval	end;
 
-	i = 0;
-	while (str[i])
-	{
-		i++;
-	}
-	return (i);
+	gettimeofday(&end, NULL);
+	return ((end.tv_sec * 1000 + end.tv_usec / 1000) - (start.tv_sec * 1000 + start.tv_usec / 1000));
 }
 
-char	*ft_strdup(const char *source)
+int	ft_error(int Er)
 {
-	char	*s;
-	int		i;
-
-	i = 0;
-	while (source[i])
-		i++;
-	s = malloc(i + 1);
-	if (!s)
-		return (NULL);
-	i = 0;
-	while (source[i] != '\0')
-	{
-		s[i] = source[i];
-		i++;
-	}
-	s[i] = '\0';
-	return (s);
+	if (Er == 1)
+		printf("arguments error\ncheck your arguments\n");
+	else
+		printf("Error\n");
+	return (1);
 }
