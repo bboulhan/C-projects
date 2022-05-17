@@ -60,7 +60,8 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-int	creat_threads(struct timeval start, pthread_t *philo, t_philosof **p, t_sim *sim)
+int	creat_threads(struct timeval *start, pthread_t *philo,
+	t_philosof **p, t_sim *sim)
 {
 	int	i;
 
@@ -72,7 +73,7 @@ int	creat_threads(struct timeval start, pthread_t *philo, t_philosof **p, t_sim 
 				&routine, (void *) p[i]) != 0)
 			return (ft_error(2));
 		if (i == 0)
-			gettimeofday(&start, NULL);
+			gettimeofday(start, NULL);
 		i++;
 	}
 	return (0);
@@ -84,24 +85,25 @@ int	manager(pthread_t *philo, t_philosof **p, t_sim *sim)
 	int				i;
 
 	i = 0;
+	if (creat_threads(&start, philo, p, sim))
+		return (1);
 	while (1)
 	{
 		if (get_time(p[i]->death) > sim->time_to_die / 1000)
 		{
-			printf("%d philosopher [%d] died\n",
-				get_time(start), p[i]->philosof_number + 1);
-			free(philo);
+			pthread_mutex_lock(sim->dying);
+			printf("%d philosopher [%d] died\n", get_time(start),
+				p[i]->philosof_number + 1);
 			break ;
 		}
 		if (sim->meals_left == sim->number_of_philosophers
 			&& sim->all_meals > 0)
-		{
-			free(philo);
 			break ;
-		}
 		i++;
 		if (i >= sim->number_of_philosophers)
 			i = 0;
 	}
+	pthread_mutex_unlock(sim->dying);
+	free(philo);
 	return (0);
 }

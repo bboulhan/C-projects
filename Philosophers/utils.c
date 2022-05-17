@@ -52,9 +52,9 @@ int	ft_isdigit(int c)
 void	ft_usleep(int time)
 {
 	struct timeval	start;
-	
+
 	gettimeofday(&start, NULL);
-	while ((useconds_t )(get_time(start) * 1000 < time))
+	while ((useconds_t)(get_time(start) * 1000 < time))
 		usleep(1);
 }
 
@@ -63,7 +63,8 @@ int	get_time(struct timeval start)
 	struct timeval	end;
 
 	gettimeofday(&end, NULL);
-	return ((end.tv_sec * 1000 + end.tv_usec / 1000) - (start.tv_sec * 1000 + start.tv_usec / 1000));
+	return ((end.tv_sec * 1000 + end.tv_usec / 1000)
+		- (start.tv_sec * 1000 + start.tv_usec / 1000));
 }
 
 int	ft_error(int Er)

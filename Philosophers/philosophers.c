@@ -14,9 +14,9 @@
 
 int	init(pthread_t **philo, t_sim *ph, t_philosof ***s)
 {
-	int	i;
-	t_philosof **p;
-	
+	int			i;
+	t_philosof	**p;
+
 	p = *s;
 	i = 0;
 	*philo = malloc(sizeof(pthread_t) * ph->number_of_philosophers);
@@ -41,8 +41,9 @@ int	init(pthread_t **philo, t_sim *ph, t_philosof ***s)
 
 void	free_all(t_sim *sim, t_philosof **p)
 {
-	int	i;
+	int			i;
 	t_philosof	**t;
+
 	t = p;
 	i = 0;
 	while (i < sim->number_of_philosophers)
@@ -56,10 +57,10 @@ void	free_all(t_sim *sim, t_philosof **p)
 	free(sim->mutex);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	pthread_t		*philo;
-	t_sim 			sim;
+	t_sim			sim;
 	t_philosof		**p;
 
 	p = NULL;

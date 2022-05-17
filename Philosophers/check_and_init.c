@@ -39,12 +39,14 @@ void	set_sim(char **av, t_sim *ph, int ac)
 	ph->time_to_eat = ft_atoi(av[i++]) * 1000;
 	ph->time_to_sleep = ft_atoi(av[i++]) * 1000;
 	ph->mutex = malloc(sizeof(pthread_mutex_t *) * ph->number_of_philosophers);
+	ph->dying = malloc(sizeof(pthread_mutex_t) * 1);
 	ph->meals_left = 0;
 	if (ac == 6)
 		ph->all_meals = ft_atoi(av[i]);
 	else
 		ph->all_meals = 0;
 	i = 0;
+	pthread_mutex_init(ph->dying, NULL);
 	while (i < ph->number_of_philosophers)
 	{
 		ph->mutex[i] = malloc(sizeof(pthread_mutex_t));
@@ -60,16 +62,32 @@ int	check_forks(int x, int y)
 		return (x + 1);
 }
 
+int	check_num(int ac, char **av)
+{
+	int	i;
+
+	i = 1;
+	if (ft_atoi(av[1]) > 265)
+		return (0);
+	while (i < ac)
+	{
+		if (ft_atoi(av[i]) > 2147483647)
+			return (0);
+		if (ft_atoi(av[1]) < 1)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	check_args(int ac, char **av)
 {
 	int	i;
 	int	j;
 
 	j = 0;
-	i = 1;
-	if (ft_atoi(av[1]) < 1)
-		return (0);
-	while (i < ac)
+	i = 0;
+	while (++i < ac)
 	{
 		while (av[i][j])
 		{
@@ -83,10 +101,7 @@ int	check_args(int ac, char **av)
 			}
 			j++;
 		}
-		if (ft_atoi(av[i]) > 2147483647)
-			return (0);
 		j = 0;
-		i++;
 	}
-	return (1);
+	return (check_num(ac, av));
 }

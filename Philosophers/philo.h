@@ -23,6 +23,7 @@
 typedef struct s_sim
 {
 	pthread_mutex_t	**mutex;
+	pthread_mutex_t	*dying;
 	int				time_to_eat;
 	int				time_to_die;
 	int				time_to_sleep;
@@ -41,6 +42,7 @@ typedef struct s_philosof
 }	t_philosof;
 
 int		check_args(int ac, char **av);
+int		check_forks(int x, int y);
 int		ft_atoi(const char *str);
 int		ft_isdigit(int c);
 void	set_sim(char **av, t_sim *ph, int ac);
