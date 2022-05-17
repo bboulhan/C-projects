@@ -15,20 +15,20 @@
 void	sim_eat(t_philosof *p, struct timeval start, int *i)
 {
 	pthread_mutex_lock(p->sim->mutex[p->philosof_number]);
-	printf("%d philosopher [%d] has taken a fork\n",
+	printf("%d ms %d has taken a fork\n",
 		get_time(start), p->philosof_number + 1);
 	pthread_mutex_lock(p->sim->mutex[check_forks(p->philosof_number,
 			p->sim->number_of_philosophers)]);
-	printf("%d philosopher [%d] has taken a fork\n",
+	printf("%d ms %d has taken a fork\n",
 		get_time(start), p->philosof_number + 1);
-	printf("%d philosopher [%d] is eating\n",
+	printf("%d ms %d is eating\n",
 		get_time(start), p->philosof_number + 1);
+	(*i)++;
+	gettimeofday(&p->death, NULL);
+	usleep(p->sim->time_to_eat);
 	p->number_of_meals++;
 	if (p->number_of_meals == p->sim->all_meals)
 		p->sim->meals_left++;
-	gettimeofday(&p->death, NULL);
-	usleep(p->sim->time_to_eat);
-	(*i)++;
 	pthread_mutex_unlock(p->sim->mutex[check_forks(p->philosof_number,
 			p->sim->number_of_philosophers)]);
 	pthread_mutex_unlock(p->sim->mutex[p->philosof_number]);
@@ -49,11 +49,11 @@ void	*routine(void *arg)
 		sim_eat(p, start, &i);
 		if (i > 0)
 		{
-			printf("%d philosopher [%d] is sleeping\n",
+			printf("%d ms %d is sleeping\n",
 				get_time(start), p->philosof_number + 1);
 			usleep(p->sim->time_to_sleep);
 			i = 0;
-			printf("%d philosopher [%d] is thinking\n",
+			printf("%d ms %d is thinking\n",
 				get_time(start), p->philosof_number + 1);
 		}
 	}
@@ -89,10 +89,10 @@ int	manager(pthread_t *philo, t_philosof **p, t_sim *sim)
 		return (1);
 	while (1)
 	{
-		if (get_time(p[i]->death) > sim->time_to_die / 1000)
+		if (get_time(p[i]->death) > sim->time_to_die / 1000 + 5)
 		{
 			pthread_mutex_lock(sim->dying);
-			printf("%d philosopher [%d] died\n", get_time(start),
+			printf("%d ms %d died\n", get_time(start),
 				p[i]->philosof_number + 1);
 			break ;
 		}
@@ -103,7 +103,6 @@ int	manager(pthread_t *philo, t_philosof **p, t_sim *sim)
 		if (i >= sim->number_of_philosophers)
 			i = 0;
 	}
-	pthread_mutex_unlock(sim->dying);
 	free(philo);
 	return (0);
 }
