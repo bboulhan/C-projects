@@ -45,7 +45,7 @@ int			check_args(int ac, char **av);
 int			check_forks(int x, int y);
 int			ft_atoi(const char *str);
 int			ft_isdigit(int c);
-void		set_sim(char **av, t_sim *ph, int ac);
+int			set_sim(char **av, t_sim *ph, int ac);
 void		put_values(t_sim *p);
 int			ft_error(int Er);
 int			get_time(struct timeval start);

@@ -31,7 +31,7 @@ clean :
 	rm -f $(OBJS) $(BSRCS)
 
 fclean : clean
-	rm -f $(NAME) so_long_bonus
+	rm -f $(NAME)
 
 re : fclean all
 

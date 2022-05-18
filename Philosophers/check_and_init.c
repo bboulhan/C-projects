@@ -29,7 +29,7 @@ void	put_values_2(t_sim *ph, t_philosof ***s)
 	*s = p;
 }
 
-void	set_sim(char **av, t_sim *ph, int ac)
+int	set_sim(char **av, t_sim *ph, int ac)
 {
 	int	i;
 
@@ -39,7 +39,11 @@ void	set_sim(char **av, t_sim *ph, int ac)
 	ph->time_to_eat = ft_atoi(av[i++]);
 	ph->time_to_sleep = ft_atoi(av[i++]);
 	ph->mutex = malloc(sizeof(pthread_mutex_t *) * ph->number_of_philosophers);
+	if (!ph->mutex)
+		return (ft_error(2));
 	ph->dying = malloc(sizeof(pthread_mutex_t) * 1);
+	if (!ph->dying)
+		return (ft_error(2));
 	ph->meals_left = 0;
 	if (ac == 6)
 		ph->all_meals = ft_atoi(av[i]);
@@ -50,8 +54,11 @@ void	set_sim(char **av, t_sim *ph, int ac)
 	while (i < ph->number_of_philosophers)
 	{
 		ph->mutex[i] = malloc(sizeof(pthread_mutex_t));
+		if (!ph->mutex[i])
+			return (ft_error(2));
 		pthread_mutex_init(ph->mutex[i++], NULL);
 	}
+	return (0);
 }
 
 int	check_num(int ac, char **av)

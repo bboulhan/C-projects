@@ -21,22 +21,22 @@ int	init(pthread_t **philo, t_sim *ph, t_philosof ***s)
 	i = 0;
 	*philo = malloc(sizeof(pthread_t) * ph->number_of_philosophers);
 	if (!(*philo))
-		return (0);
-	p = malloc(sizeof(t_philosof *) * (ph->number_of_philosophers) + 1);
+		return (1);
+	p = malloc(sizeof(t_philosof *) * (ph->number_of_philosophers + 1));
 	if (!p)
-		return (0);
+		return (1);
 	while (i < ph->number_of_philosophers)
 	{
 		p[i] = malloc(sizeof(t_philosof) * 1);
 		if (!p[i])
-			return (0);
+			return (1);
 		p[i]->thread = philo[i];
 		i++;
 	}
 	p[i] = NULL;
 	put_values_2(ph, &p);
 	*s = p;
-	return (1);
+	return (0);
 }
 
 void	free_all(t_sim *sim, t_philosof **p)
@@ -68,8 +68,10 @@ int	main(int ac, char **av)
 		return (ft_error(1));
 	if (ac == 6 && ft_atoi(av[5]) == 0)
 		return (1);
-	set_sim(av, &sim, ac);
-	init(&philo, &sim, &p);
+	if (set_sim(av, &sim, ac))
+		return (1);
+	if (init(&philo, &sim, &p))
+		return (1);
 	if (manager(philo, p, &sim))
 		return (1);
 	free_all(&sim, p);
