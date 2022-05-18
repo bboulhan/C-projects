@@ -12,20 +12,28 @@
 
 #include "philo.h"
 
+int	check_forks(int x, int y)
+{
+	if (x == y - 1)
+		return (0);
+	else
+		return (x + 1);
+}
+
 void	sim_eat(t_philosof *p, struct timeval start, int *i)
 {
 	pthread_mutex_lock(p->sim->mutex[p->philosof_number]);
-	printf("%d ms %d has taken a fork\n",
+	printf("%d  %d has taken a fork\n",
 		get_time(start), p->philosof_number + 1);
 	pthread_mutex_lock(p->sim->mutex[check_forks(p->philosof_number,
 			p->sim->number_of_philosophers)]);
-	printf("%d ms %d has taken a fork\n",
+	printf("%d  %d has taken a fork\n",
 		get_time(start), p->philosof_number + 1);
-	printf("%d ms %d is eating\n",
+	printf("%d  %d is eating\n",
 		get_time(start), p->philosof_number + 1);
 	(*i)++;
 	gettimeofday(&p->death, NULL);
-	usleep(p->sim->time_to_eat);
+	ft_usleep(p->sim->time_to_eat);
 	p->number_of_meals++;
 	if (p->number_of_meals == p->sim->all_meals)
 		p->sim->meals_left++;
@@ -44,16 +52,18 @@ void	*routine(void *arg)
 	p = arg;
 	gettimeofday(&start, NULL);
 	gettimeofday(&p->death, NULL);
+	if (p->philosof_number % 2 == 0)
+		usleep(500);
 	while (1)
 	{
 		sim_eat(p, start, &i);
 		if (i > 0)
 		{
-			printf("%d ms %d is sleeping\n",
+			printf("%d  %d is sleeping\n",
 				get_time(start), p->philosof_number + 1);
-			usleep(p->sim->time_to_sleep);
+			ft_usleep(p->sim->time_to_sleep);
 			i = 0;
-			printf("%d ms %d is thinking\n",
+			printf("%d  %d is thinking\n",
 				get_time(start), p->philosof_number + 1);
 		}
 	}
@@ -68,7 +78,6 @@ int	creat_threads(struct timeval *start, pthread_t *philo,
 	i = 0;
 	while (i < sim->number_of_philosophers)
 	{
-		usleep(500);
 		if (pthread_create(&philo[i], NULL,
 				&routine, (void *) p[i]) != 0)
 			return (ft_error(2));
@@ -89,10 +98,10 @@ int	manager(pthread_t *philo, t_philosof **p, t_sim *sim)
 		return (1);
 	while (1)
 	{
-		if (get_time(p[i]->death) > sim->time_to_die / 1000 + 5)
+		if (get_time(p[i]->death) > sim->time_to_die)
 		{
 			pthread_mutex_lock(sim->dying);
-			printf("%d ms %d died\n", get_time(start),
+			printf("%d  %d died\n", get_time(start),
 				p[i]->philosof_number + 1);
 			break ;
 		}
@@ -104,5 +113,6 @@ int	manager(pthread_t *philo, t_philosof **p, t_sim *sim)
 			i = 0;
 	}
 	free(philo);
+	usleep(100);
 	return (0);
 }

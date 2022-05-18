@@ -51,11 +51,19 @@ int	ft_isdigit(int c)
 
 void	ft_usleep(int time)
 {
-	struct timeval	start;
+	long long	t;
 
-	gettimeofday(&start, NULL);
-	while ((useconds_t)(get_time(start) * 1000 < time))
+	t = get_time2();
+	while (get_time2() - t < time)
 		usleep(1);
+}
+
+long long	get_time2(void)
+{
+	struct timeval	end;
+
+	gettimeofday(&end, NULL);
+	return ((end.tv_sec * 1000 + end.tv_usec / 1000));
 }
 
 int	get_time(struct timeval start)
@@ -65,13 +73,4 @@ int	get_time(struct timeval start)
 	gettimeofday(&end, NULL);
 	return ((end.tv_sec * 1000 + end.tv_usec / 1000)
 		- (start.tv_sec * 1000 + start.tv_usec / 1000));
-}
-
-int	ft_error(int Er)
-{
-	if (Er == 1)
-		printf("arguments error\ncheck your arguments\n");
-	else
-		printf("Error\n");
-	return (1);
 }

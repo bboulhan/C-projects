@@ -38,20 +38,22 @@ typedef struct s_philosof
 	int				philosof_number;
 	int				number_of_meals;
 	struct timeval	death;
-	t_sim			*sim;
+	t_sim			*sim;	
 }	t_philosof;
 
-int		check_args(int ac, char **av);
-int		check_forks(int x, int y);
-int		ft_atoi(const char *str);
-int		ft_isdigit(int c);
-void	set_sim(char **av, t_sim *ph, int ac);
-void	put_values(t_sim *p);
-int		ft_error(int Er);
-int		get_time(struct timeval start);
-void	ft_usleep(int time);
-void	put_values_2(t_sim *ph, t_philosof ***s);
-void	*routine(void *arg);
-int		manager(pthread_t *philo, t_philosof **p, t_sim *sim);
+int			check_args(int ac, char **av);
+int			check_forks(int x, int y);
+int			ft_atoi(const char *str);
+int			ft_isdigit(int c);
+void		set_sim(char **av, t_sim *ph, int ac);
+void		put_values(t_sim *p);
+int			ft_error(int Er);
+int			get_time(struct timeval start);
+void		ft_usleep(int time);
+void		put_values_2(t_sim *ph, t_philosof ***s);
+void		*routine(void *arg);
+int			manager(pthread_t *philo, t_philosof **p, t_sim *sim);
+long long	get_time2(void);
+void		ft_usleep(int time);
 
 #endif

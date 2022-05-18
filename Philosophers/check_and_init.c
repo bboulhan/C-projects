@@ -35,9 +35,9 @@ void	set_sim(char **av, t_sim *ph, int ac)
 
 	i = 1;
 	ph->number_of_philosophers = ft_atoi(av[i++]);
-	ph->time_to_die = ft_atoi(av[i++]) * 1000;
-	ph->time_to_eat = ft_atoi(av[i++]) * 1000;
-	ph->time_to_sleep = ft_atoi(av[i++]) * 1000;
+	ph->time_to_die = ft_atoi(av[i++]);
+	ph->time_to_eat = ft_atoi(av[i++]);
+	ph->time_to_sleep = ft_atoi(av[i++]);
 	ph->mutex = malloc(sizeof(pthread_mutex_t *) * ph->number_of_philosophers);
 	ph->dying = malloc(sizeof(pthread_mutex_t) * 1);
 	ph->meals_left = 0;
@@ -54,21 +54,11 @@ void	set_sim(char **av, t_sim *ph, int ac)
 	}
 }
 
-int	check_forks(int x, int y)
-{
-	if (x == y - 1)
-		return (0);
-	else
-		return (x + 1);
-}
-
 int	check_num(int ac, char **av)
 {
 	int	i;
 
 	i = 1;
-	if (ft_atoi(av[1]) > 265)
-		return (0);
 	while (i < ac)
 	{
 		if (ft_atoi(av[i]) > 2147483647)
@@ -104,4 +94,13 @@ int	check_args(int ac, char **av)
 		j = 0;
 	}
 	return (check_num(ac, av));
+}
+
+int	ft_error(int Er)
+{
+	if (Er == 1)
+		printf("arguments error\ncheck your arguments\n");
+	else
+		printf("Error\n");
+	return (1);
 }

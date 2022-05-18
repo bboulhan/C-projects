@@ -66,6 +66,8 @@ int	main(int ac, char **av)
 	p = NULL;
 	if ((ac != 6 && ac != 5) || !check_args(ac, av))
 		return (ft_error(1));
+	if (ac == 6 && ft_atoi(av[5]) == 0)
+		return (1);
 	set_sim(av, &sim, ac);
 	init(&philo, &sim, &p);
 	if (manager(philo, p, &sim))
