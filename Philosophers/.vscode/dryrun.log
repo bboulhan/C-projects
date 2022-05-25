@@ -1,0 +1,9 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/bboulhan/Desktop/1337/Philosophers'
+cc -Wall -Werror -Wextra   -c -o check_and_init.o check_and_init.c
+cc -Wall -Werror -Wextra   -c -o philosophers.o philosophers.c
+cc -Wall -Werror -Wextra   -c -o utils.o utils.c
+cc -Wall -Werror -Wextra   -c -o simulation.o simulation.c
+cc -Wall -Werror -Wextra check_and_init.o philosophers.o utils.o simulation.o -o philo
+make: Leaving directory `/Users/bboulhan/Desktop/1337/Philosophers'
+ 

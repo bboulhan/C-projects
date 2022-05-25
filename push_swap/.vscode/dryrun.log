@@ -1,0 +1,18 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/bboulhan/Desktop/1337/push_swap'
+cc -Wall -Werror -Wextra   -c -o mandatory/algo.o mandatory/algo.c
+cc -Wall -Werror -Wextra   -c -o mandatory/algo_utils2.o mandatory/algo_utils2.c
+cc -Wall -Werror -Wextra   -c -o mandatory/instructions_2.o mandatory/instructions_2.c
+cc -Wall -Werror -Wextra   -c -o mandatory/utils.o mandatory/utils.c
+cc -Wall -Werror -Wextra   -c -o mandatory/algo_utils.o mandatory/algo_utils.c
+cc -Wall -Werror -Wextra   -c -o mandatory/instructions.o mandatory/instructions.c
+cc -Wall -Werror -Wextra   -c -o mandatory/push_swap.o mandatory/push_swap.c
+cc -Wall -Werror -Wextra   -c -o mandatory/stock.o mandatory/stock.c
+cc -Wall -Werror -Wextra   -c -o mandatory/utils_2.o mandatory/utils_2.c
+cc -Wall -Werror -Wextra   -c -o mandatory/arguments.o mandatory/arguments.c
+cc -Wall -Werror -Wextra   -c -o mandatory/check.o mandatory/check.c
+cc -Wall -Werror -Wextra   -c -o mandatory/clean_stack.o mandatory/clean_stack.c
+cc -Wall -Werror -Wextra   -c -o mandatory/ft_split.o mandatory/ft_split.c
+cc -Wall -Werror -Wextra ./mandatory/algo.o ./mandatory/algo_utils2.o ./mandatory/instructions_2.o ./mandatory/utils.o ./mandatory/algo_utils.o ./mandatory/instructions.o ./mandatory/push_swap.o ./mandatory/stock.o ./mandatory/utils_2.o ./mandatory/arguments.o ./mandatory/check.o ./mandatory/clean_stack.o ./mandatory/ft_split.o -o push_swap
+make: Leaving directory `/Users/bboulhan/Desktop/1337/push_swap'
+ 
