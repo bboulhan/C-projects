@@ -28,29 +28,47 @@ int	check_pipe(char *line)
 	return (y);
 }
 
+void	print(t_list *node)
+{
+	int i = 0;
+
+	while (node)
+	{
+		while (node->table[i])
+			printf("%s&\n", node->table[i++]);
+		printf("--------------------\n");
+		i = 0;
+		node = node->next;
+	}
+
+}
 
 int	main(void)
 {
 	t_list	*node;
 	char	*line;
-	char	**table;
-	int		pid;
+	//int		pid;
 
 	line = NULL;
 	node = NULL;
 	node = malloc(sizeof(t_list) * 1);
+	node->next = NULL;
+	// while (1)
+	// {
+	// 	pid = fork();
+	// 	if (pid == 0)
+	// 	{
+	// 		line = readline("~$ ");
+	// 		//checker(line, &node);
+	// 		//print(node);
+	// 	}
+	// }
 	while (1)
-	{
-		pid = fork();
-		if (pid == 0)
-		{
-			line = readline("~$ ");
-			
-		}
+	{	
+		line = readline("~$ ");
+		checker(line, &node);
+		//print(node);
 	}
-
-
-
 }
 
 

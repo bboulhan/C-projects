@@ -39,21 +39,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (str);
 }
 
-t_stack	*ft_lstnew(int content)
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	t_stack	*x;
-
-	x = malloc(sizeof(t_stack));
-	if (!x)
-		return (NULL);
-	x -> content = content;
-	x -> next = NULL;
-	return (x);
-}
-
-void	ft_lstadd_back(t_stack **lst, t_stack *new)
-{
-	t_stack	*y;
+	t_list	*y;
 
 	y = NULL;
 	if (new)
@@ -66,9 +54,9 @@ void	ft_lstadd_back(t_stack **lst, t_stack *new)
 	}
 }
 
-t_stack	*ft_lstlast(t_stack *lst)
+t_list	*ft_lstlast(t_list *lst)
 {
-	t_stack	*y;
+	t_list	*y;
 
 	y = NULL;
 	if (lst)

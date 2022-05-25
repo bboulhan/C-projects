@@ -74,18 +74,21 @@ void	*ft_calloc(size_t num, size_t size)
 	return (x);
 }
 
-void	*ft_realloc(char **table, int size)
+char	**ft_realloc(char **table, int size)
 {
 	char	**t;
 	int		i;
 
-	i = -1;
-	t = malloc(size * sizeof(char *));
+	i = 0;
+	t = malloc((size + 1) * sizeof(char *));
 	if (!t)
 		return (NULL);
 	while (table[i])
+	{
+		t[i] = malloc(ft_strlen(table[i]) + 1);
+		ft_memcpy(t[i], table[i], ft_strlen(table[i]));
 		i++;
-	ft_memcpy(t, table, i);
-	free(table);
+	}
+	ft_free(table);
 	return (t);
 }

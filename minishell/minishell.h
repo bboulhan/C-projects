@@ -26,7 +26,7 @@ typedef struct s_list
 	char	**table;
 	char	*cmd;
 	char	*type;
-	int		next;
+	struct s_list	*next;
 	int		pip;
 
 }	t_list;
@@ -37,13 +37,13 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_calloc(size_t num, size_t size);
 void	*ft_free(char **c);
 char	**ft_split(char const *s, char c);
-void	*ft_realloc(char **table, int size);
+char	**ft_realloc(char **table, int size);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-t_stack	*ft_lstlast(t_stack *lst);
-void	ft_lstadd_back(t_stack **lst, t_stack *new);
-t_stack	*ft_lstnew(int content);
-
-
+t_list	*ft_lstlast(t_list *lst);
+void	ft_lstadd_back(t_list **lst, t_list *new);
+t_list	*ft_lstnew(int content);
+void	checker(char *line, t_list **node);
+char	*ft_strtrim(char const *s1, char const *set);
 
 
 
