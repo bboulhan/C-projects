@@ -1,8 +1,0 @@
-make --dry-run --keep-going --print-directory
-make: Entering directory `/Users/bboulhan/Desktop/minishell'
-cc -Wall -Werror -Wextra   -c -o checking.o checking.c
-cc -Wall -Werror -Wextra   -c -o ft_strtrim.o ft_strtrim.c
- 
-cc -Wall -Werror -Wextra minishell.o utils.o ft_split.o utils_2.o checking.o ft_strtrim.o -lreadline -o minishell
-make: Leaving directory `/Users/bboulhan/Desktop/minishell'
- 
