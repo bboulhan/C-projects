@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checking.c                                          :+:      :+:    :+:   */
+/*   checking.c                                          :+:      :+:    :+:  */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bboulhan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,25 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-char	*cut_string(char *str, int i0, int i1)
-{
-	int		i;
-	char	*line;
 
-	i = 0;
-	line = malloc(i1 - i0 + 1);
-	if (!line)
-		return (NULL);
-	while (str[i0 + i] && i + i0 < i1)
-	{
-		line[i] = str[i0 + i];
-		i++;
-	}
-	line[i] = 0;
-	return (ft_strtrim(line, " "));
-}
-
-char	*quote(char *line, int *i)	
+char	*quote(char *line, int *i)
 {
 	int		j;
 	char	*x;
@@ -59,7 +42,6 @@ char	*space(char *line, int *i)
 	return (x);
 }
 
-
 void	add_stack(t_list **node, char *line, int *k)
 {
 	int		i;
@@ -77,17 +59,18 @@ void	add_stack(t_list **node, char *line, int *k)
 	while (line[++i])
 	{
 		if (line[i] == 39 || line[i] == '"')
+		{
 			new->table[j++] = quote(line, &i);
+		}
 		else if (line[i] == '|')
 			break ;
 		else if (line[i] != ' ')
+		{
 			new->table[j++] = space(line, &i);
+		}
 	}
-	printf("%s\n", new->table[0]);
-	new->table[j] = ft_calloc(1, 1);
-	new->table[j] = NULL;
-	ft_lstadd_back(node, new);
 	*k = i;
+	ft_lstadd_back(node, new);
 }
 
 void	checker(char *line, t_list **node)
@@ -106,34 +89,17 @@ void	checker(char *line, t_list **node)
 	{
 		if (line[i] == 39 || line[i] == '"')
 		{
-			tmp->table[j] = quote(line, &i);
-			printf("%s$\n", tmp->table[j]);
-			j++;
+			tmp->table[j++] = quote(line, &i);
+			tmp->table = ft_realloc(tmp->table, j + 1);
 		}
 		else if (line[i] == '|')
 		{
-			tmp->table[j] = NULL;
 			add_stack(&tmp, line, &i);
 		}
 		else if (line[i] != ' ')
 		{
-			tmp->table[j] = space(line, &i);
-			printf("%s$\n", tmp->table[j]);
-			j++;
+			tmp->table[j++] = space(line, &i);
+			tmp->table = ft_realloc(tmp->table, j + 1);
 		}
-		//printf("%d\t%d\t%zu\n", i, j, ft_strlen(line));
-
 	}
-	printf("%s\n", tmp->table[0]);
-	tmp->table[j] = ft_calloc(1, 1);
-	tmp->table[j] = NULL;
-	
 }
-
-// void	lexer(char *line, t_list **node)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (line)
-// }

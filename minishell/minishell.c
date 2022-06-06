@@ -30,8 +30,9 @@ int	check_pipe(char *line)
 
 void	print(t_list *node)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	while (node)
 	{
 		while (node->table[i])
@@ -40,60 +41,39 @@ void	print(t_list *node)
 		i = 0;
 		node = node->next;
 	}
+}
 
+void	free_all(t_list **node)
+{
+	int		i;
+	t_list	*tmp;
+	t_list	*tmp2;
+
+	tmp = *node;
+	i = 0;
+	while (tmp)
+	{
+		ft_free(tmp->table);
+		free(tmp->cmd);
+		tmp2 = tmp;
+		tmp = tmp->next;
+		free(tmp2);
+	}
 }
 
 int	main(void)
 {
 	t_list	*node;
 	char	*line;
-	//int		pid;
 
-	line = NULL;
-	node = NULL;
-	node = malloc(sizeof(t_list) * 1);
-	node->next = NULL;
-	// while (1)
-	// {
-	// 	pid = fork();
-	// 	if (pid == 0)
-	// 	{
-	// 		line = readline("~$ ");
-	// 		//checker(line, &node);
-	// 		//print(node);
-	// 	}
-	// }
 	while (1)
-	{	
+	{
+		node = malloc(sizeof(t_list) * 1);
+		node->next = NULL;
 		line = readline("~$ ");
-		checker(line, &node);
-		//print(node);
+		parcing(line, node);
+		free(line);
+		print(node);
+		free_all(&node);
 	}
 }
-
-
-
-// int	main(void)
-// {
-// 	char	**argv;
-// 	char	*path[] = { "/bin/", "/bin/sh"};
-// 	int		pid;
-
-// 	while (1)
-// 	{
-// 		pid = fork();
-// 		if (pid == 0)
-// 		{
-// 			argv = ft_split(readline("~$ "), ' ');
-// 			if (execve(ft_strjoin(path[0], argv[0]), argv, NULL) == -1
-// 				&& execve(path[1], argv, NULL) == -1)
-// 			{
-// 				perror("");
-// 			}
-// 			ft_free(argv);
-// 		}
-// 		wait(NULL);
-// 	}
-// 	return (0);
-// }
-

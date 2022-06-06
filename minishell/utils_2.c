@@ -12,6 +12,27 @@
 
 #include "minishell.h"
 
+char	*ft_strdup(const char *source)
+{
+	char	*s;
+	int		i;
+
+	i = 0;
+	while (source[i])
+		i++;
+	s = ft_calloc(i + 1, 1);
+	if (!s)
+		return (NULL);
+	i = 0;
+	while (source[i] != '\0')
+	{
+		s[i] = source[i];
+		i++;
+	}
+	s[i] = '\0';
+	return (s);
+}
+
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
@@ -23,9 +44,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (start < i)
 	{
 		if ((i - start) < len)
-        	str = malloc(i - start + 1);
-        else
-			str = malloc(len + 1);
+			str = ft_calloc(i - start + 1, 1);
+		else
+			str = ft_calloc(len + 1, 1);
 		if (!str)
 			return (NULL);
 		i = 0;
@@ -34,7 +55,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		str[i] = 0;
 		return (str);
 	}
-	str = malloc(1);
+	str = ft_calloc(1, 1);
 	str[0] = 0;
 	return (str);
 }
