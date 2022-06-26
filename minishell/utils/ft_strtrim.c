@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboulhan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 20:29:00 by bboulhan          #+#    #+#             */
-/*   Updated: 2021/11/23 02:32:23 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/06/19 19:26:56 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "minishell.h"
+
+#include "../minishell.h"
 
 int	check(char *s1, char *set, int i)
 {
@@ -50,6 +51,7 @@ char	*ft_strtrim(char *s1, char *set)
 	{
 		s = malloc(1);
 		s[0] = 0;
+		free(s1);
 		return (s);
 	}
 	s = malloc(ft_strlen(s1) - (i + c) + 1);

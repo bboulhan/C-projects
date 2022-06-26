@@ -3,24 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboulhan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 15:56:47 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/05/21 15:59:45 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/06/24 09:42:08 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char *s2)
 {
 	int		i;
-	int		j;
 	char	*s;
 
 	if (!s1 || !s2)
 		return (NULL);
-	j = 0;
 	i = ft_strlen(s1) + ft_strlen(s2);
 	s = malloc(i + 1);
 	if (!s)
@@ -31,9 +29,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (s);
 }
 
-size_t	ft_strlen(const char *s)
+int	ft_strlen(const char *s)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (s[i])
@@ -80,7 +78,7 @@ char	**ft_realloc(char **table, int size)
 	int		i;
 
 	i = 0;
-	t = malloc((size + 1) * sizeof(char *));
+	t = malloc(sizeof(char *) * (size + 1));
 	if (!t)
 		return (NULL);
 	while (table[i])
@@ -88,7 +86,46 @@ char	**ft_realloc(char **table, int size)
 		t[i] = ft_strdup(table[i]);
 		i++;
 	}
-	t[i] = NULL;
+	t[i] = "realloc";
+	t[size] = NULL;
 	ft_free(table);
 	return (t);
+}
+
+int	ft_isalpha(int c)
+{
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+		return (1);
+	else
+		return (0);
+}
+
+int	ft_isalnum(int c)
+{
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122) || (c >= '0' && c <= '9'))
+		return (1);
+	else
+		return (0);
+}
+
+
+/*test*/
+char **ft_strdup_red(char **source)
+{
+	char **s;
+	int i;
+	int y;
+
+	s = malloc(check_redirection_index(source, 0) * sizeof(char *));
+	if (!s)
+		return (NULL);
+	y = 0;
+	i = check_redirection_index(source, 0);
+	while (y < i)
+	{
+		s[y] = ft_strdup(source[y]);
+		y++;
+	}
+	s[y] = 0;
+	return (s);
 }
