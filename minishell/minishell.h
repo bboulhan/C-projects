@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 16:19:27 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/06/26 23:56:31 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/07/03 14:38:09 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,38 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <signal.h>
+# include <string.h>
 # include <fcntl.h>
 # include <sys/types.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
-// typedef struct s_red
-// {
-// 	char	**args;
-// 	char	**red_args;
-// 	char	*cmd;
-// 	char	type;
-// }	t_red;
+
+typedef struct s_data
+{
+	char	**env;
+	char	**export;
+	int		sig_i;
+	int		sig_q;
+	int		exit_status;
+	int		hd;
+	char	*str;
+	int  	d;
+	int		signal;
+	int		fd_i[4];
+}	t_data;
+
+t_data	g_data;
 
 extern char **environ;
+
+typedef struct s_env
+{
+	char			**env;
+	char			**export;
+	int				d;
+}	t_env;
+
 
 typedef struct s_list
 {
@@ -42,15 +60,9 @@ typedef struct s_list
 	char			**red_args;
 	char			**args;
 	struct s_list	*next;
-	//struct s_red	*red;
-	
 }	t_list;
 
-typedef struct s_env
-{
-	char			**env;
-	char			**export;
-}	t_env;
+void	print(t_list *node);
 
 //utils
 char	*ft_strjoin(char const *s1, char *s2);
@@ -86,7 +98,6 @@ int		lexer2(t_list *node, t_list *tmp, char **par);
 //parcer
 int		cmd_and_args(t_list *node);
 char	*put_arg(char *str);
-void	*ft_error(int Er, char **table, char *str);
 int		parcer(t_list *node);
 int		parcing(char *line, t_list *node);
 int		check_dollar(char *str, int start, int end);
@@ -98,6 +109,10 @@ char	*ft_strjoin1(char *s1, char *s2);
 void	init_node(t_list *node);
 char	*check_cmd(char *str);
 void	checker(char *line, t_list **node);
+int		error_checker(t_list *node);
+int 	red_errors(t_list *node);
+int		check_pipe(t_list *node);
+int 	red_errors(t_list *node);
 
 //redirection
 int		red_parcer(t_list *node);
@@ -109,22 +124,66 @@ char    **split_with_red(char *str);
 int		red_parcing(t_list *node);
 
 
-int		check_table(char **table, char *arg);
+
+int		check_fd(int *fd, int k, char **str, int c);
+void	error_dup(int *fd, int i);
+int		red(t_list *node);
+
+//pipe
+
+void	pipe_all(int d, int **fd);
+void	red_dup_bulttins(int **fd, int i, t_list *node, t_env *table);
+void	one_node(t_list *node, t_env *table, int *fi);
+void	last_node(int **fd, int pid, int d);
+void	wait_all(int d);
+void	close_fd(int **fd, int i, int d);
+void	dup_and_close(int **fd, int i, int ioo);
 //check for redirections
-int check_redirection(char **table);
-int check_redirection_index(char **table, int index);
-int simulate_redirection(t_list *node);
-
-int check_table(char **table, char *arg);
+int		check_redirection(char **table);
+int		check_redirection_index(char **table, int index, int k);
+int		simulate_redirection(t_list *node);
+int		count_red(int k, char **str);
+int		check_table(char **table, char *arg);
+int		here_check(char **str);
+void	write_str(char *str, int fd, char *arg);
 char	**ft_strdup_2(char **source);
-
+int		*save_dup_malloc(int i);
+int		ouble(char *str);
+void	ouput_redirections(int	*fd, int j, char **str, int k);
+void	redirect_output(int i, int *fd, int k, char *arg);
 //bultins
+void	non_bulltins(t_list *node, t_env *table);
+void	bulttins_simulator(t_list *node, t_env *table);
+void	bulttins(t_list *node, t_env *table);
+// export
 void	export(t_env *env, t_list *table);
-void	echo(char **argv);
-void    cd(t_env *env, t_list *table);
-void	pwd();
-void	ft_exit();
-void	env(t_env *env);
+char	*getmyenv(char *str, char **env);
+int		find_equal(char *table);
 
+void	just_equal(char *arg, t_env *env);
+void	setmyenv(char *str, char *value, t_env *env);
+	//
+void	echo(char **argv);
+void	cd(t_env *env, t_list *table);
+void	pwd(t_env *table, t_list *node);
+void	ft_exit(t_list *table);
+void	unset(t_env *env, t_list *table);
+void	env(t_env *env, t_list *table);
 char **ft_strdup_red(char **source);
+
+//unset tools
+int		ft_isalpha2(int c);
+int		ft_isalpha1(int c);
+int		check_args(char *arg);
+//main
+void	free_all(t_list **node);
+int 	ft_error_2(int Er, char **table, char *str);
+void	*ft_error(int Er, char **table, char *str);
+void	handler(int sig);
+
+//char **ft_strdup_red(char **source);
+//pipe
+void	pipeit(t_list *node, t_env *table);
+void	bulttins(t_list *node, t_env *table);
+
 #endif

@@ -1,29 +1,48 @@
 #include "../../minishell.h"
 
+void	show_oldpwd(t_env *env)
+{
+	char	*oldpwd;
+	oldpwd = getmyenv("OLDPWD", env->env);
+	printf("%s\n", oldpwd);
+	free(oldpwd);
+}
+
+void	error_oldpwd(void)
+{
+	ft_putstr_fd("do3afa2: cd: OLDPWD not set\n", 2);
+	g_data.exit_status = 1;
+}
+
+void	error_pwd(void)
+{
+	ft_putstr_fd("do3afa2: cd: HOME not set\n", 2);
+	g_data.exit_status = 1;
+}
+
 void	cd(t_env *env, t_list *table)
 {
 	char	s[100];
-	char	*oldpwd;
-	char	*pwd;
-	int		i;
 
-	oldpwd = ft_strdup("OLDPWD=");
-	pwd = ft_strdup("PWD=");
-	i = check_table(env->env, "OLDPWD");
-	if (i != -1)
+	if (check_table(env->export, "OLDPWD") != -1)
+		setmyenv("OLDPWD", getcwd(s, 100), env);
+	if (!table->args[1] || !ft_strncmp(table->args[1], "~", 1))
 	{
-		free(env->env[i]);
-		env->env[i] = ft_strjoin1(oldpwd, ft_strdup(getcwd(s, 100)));
+		if (chdir(getmyenv("HOME", env->env)) == -1)
+			error_pwd();
 	}
-	else
+	else if (!ft_strncmp(table->args[1], "-", 1))
 	{
-		env->env = ft_realloc(env->env, ft_strlen_2(env->env) + 1);
-		env->env[ft_strlen_2(env->env)] = ft_strjoin1(oldpwd,
-				ft_strdup(getcwd(s, 100)));
+		if (chdir(getmyenv("OLDPWD", env->env)) == -1)
+			error_oldpwd();
+		else
+			show_oldpwd(env);
 	}
-	if (chdir(table->args[1]) == -1)
-		printf(ANSI_COLOR_RED "cd: no such file or directory: %s\n" ANSI_COLOR_RESET, table->args[0]);
-	i = check_table(env->env, "PWD");
-	free(env->env[i]);
-	env->env[i] = ft_strjoin1(pwd, ft_strdup(getcwd(s, 100)));
+	else if (access(table->args[1], R_OK) == -1 || chdir(table->args[1]) == -1)
+	{
+		perror("do3afa2: cd: ");
+		g_data.exit_status = 1;
+	}
+	if (getcwd(s, 100) != NULL)
+		setmyenv("PWD", getcwd(s, 100), env);
 }

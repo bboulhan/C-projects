@@ -11,6 +11,10 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	i = 0;
 	s3 = (unsigned char *)s1;
 	s4 = (unsigned char *)s2;
+	if (ft_strlen(s1) != ft_strlen(s2))
+		return (-1);
+	if (s3[0] == '\0' || s4[0] == '\0')
+		return (-1);
 	if (s3 != NULL || s4 != NULL)
 	{
 		while ((s3[i] != '\0' || s4[i] != '\0')
@@ -193,16 +197,6 @@ int	check_args(char *arg)
 	return (1);
 }
 
-int	find_equal(char *table)
-{
-	int	i;
-
-	i = 0;
-	while (table[i] && table[i] != '=' && table[i] != '+')
-		i++;
-	return (i);
-}
-
 int	check_table(char **table, char *arg)
 {
 	int		i;
@@ -290,7 +284,8 @@ void	plus_equal(char *arg, t_env *env)
 		env->env[ft_strlen_2(env->env) - 1] = remove_plus(arg);
 	}
 	if (j != -1)
-		env->export[j] = ft_strjoin1(ft_strjoin1(env->export[j], ft_strdup("=")), ft_substr(arg,
+		env->export[j] = ft_strjoin1(ft_strjoin1(env->export[j],
+					ft_strdup("=")), ft_substr(arg,
 					find_equal(arg) + 2, ft_strlen(arg) - 1));
 	else
 	{
@@ -324,8 +319,10 @@ void	fill_args(t_env *env, t_list *table)
 		n = 0;
 		if (check_args(table->args[i]) == -1)
 		{
-			printf(ANSI_COLOR_RED "do3afa2: export: `%s': not a valid identifier\n" ANSI_COLOR_RESET,
-				   table->args[i]);
+			printf(ANSI_COLOR_RED
+				"do3afa2: export: `%s': not a valid identifier\n"
+				ANSI_COLOR_RESET, table->args[i]);
+			g_data.exit_status = 1;
 			continue ;
 		}
 		while (table->args[i][++j] && ft_strncmp(table->args[i], "_",
@@ -351,6 +348,12 @@ void	fill_args(t_env *env, t_list *table)
 
 void	export(t_env *env, t_list *table)
 {
+	if (table->args[1] && table->args[1][0] == '-')
+	{
+		ft_putstr_fd("do3afa2: export: option not supported\n", 2);
+		g_data.exit_status = 2;
+		return ;
+	}
 	if (ft_strlen_2(table->args) == 1)
 		show_export(env->export);
 	else

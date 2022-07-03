@@ -6,12 +6,11 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/05 13:29:49 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/06/25 22:53:37 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/07/03 04:59:18 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 int	parcer(t_list *node)
 {
@@ -26,20 +25,6 @@ int	parcer(t_list *node)
 	}
 	return (1);
 }
-
-
-// void	lower_case(char	*str)
-// {
-// 	int	i;
-
-// 	i = -1;
-// 	while (str[++i])
-// 	{
-// 		if (str[i] >= 65 && str[i] <= 90)
-// 			str[i] += 32;	
-// 	}
-// }
-
 
 char	*delete_quote(char *str)
 {
@@ -67,7 +52,6 @@ char	*delete_quote(char *str)
 	return (s);
 }
 
-
 char	*check_cmd(char *str)
 {
 	int		i;
@@ -84,13 +68,13 @@ char	*check_cmd(char *str)
 	while (cmd[++i])
 	{
 		if (!ft_isalpha(cmd[i]))
-			return (ft_error(9, NULL, cmd));			
+			return (ft_error(0, NULL, cmd));
 	}
 	i = -1;
 	while (cmd[++i])
 	{
 		if (cmd[i] >= 65 && cmd[i] <= 90)
-			cmd[i] += 32;	
+			cmd[i] += 32;
 	}
 	return (cmd);
 }
@@ -99,45 +83,26 @@ int	cmd_and_args(t_list *node)
 {
 	int	i;
 	int	j;
-	
+
 	j = 1;
 	i = 0;
 	node->cmd = ft_strdup(node->table[0]);
 	node->cmd = check_cmd(node->cmd);
 	if (!node->cmd)
-		return (0);
+		return (ft_error_2(2, NULL, node->cmd));
 	while (node->table[i])
 		i++;
 	node->args = malloc(sizeof(char *) * (i + 1));
 	if (!node->args)
-		ft_error(1, NULL, NULL);
+		return (ft_error_2(1, NULL, NULL));
 	i = 0;
 	node->args[0] = ft_strdup(node->cmd);
 	while (node->table[++i])
 	{
 		node->args[j] = put_arg(node->table[i]);
 		if (node->args[j++] == NULL)
-			ft_error(1, NULL, NULL);
+			return (ft_error_2(1, NULL, NULL));
 	}
 	node->args[j] = NULL;
 	return (1);
 }
-
-
-//------------------------------------------------
-
-
-
-// char	*clean_quote(char *str)
-// {
-// 	char	*s;
-
-// 	s = NULL;
-// 	if (str[0] == '"' || str[0] == 39)
-// 		s = ft_strdup(&str[1]);
-// 	if ((str[ft_strlen(str) - 1] == '"' || str[ft_strlen(str) - 1] == 39) && *s)
-// 		s[ft_strlen(s) - 1] = '\0';
-// 	if (*s)
-// 		return (s);
-// 	return (str);
-// }

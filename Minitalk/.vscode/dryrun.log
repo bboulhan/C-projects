@@ -1,0 +1,12 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/bboulhan/Desktop/projects/Minitalk'
+gcc -Wall -Werror -Wextra   -c -o client.o client.c
+gcc -Wall -Werror -Wextra   -c -o convert_send.o convert_send.c
+gcc -Wall -Werror -Wextra   -c -o client_outils.o client_outils.c
+gcc -Wall -Werror -Wextra client.o convert_send.o client_outils.o -o client
+gcc -Wall -Werror -Wextra   -c -o server.o server.c
+ 
+gcc -Wall -Werror -Wextra   -c -o server_outils.o server_outils.c
+gcc -Wall -Werror -Wextra server.o server_outils.o -o server
+make: Leaving directory `/Users/bboulhan/Desktop/projects/Minitalk'
+ 
