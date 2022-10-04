@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   red_utils_2.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 09:58:37 by aer-razk          #+#    #+#             */
+/*   Updated: 2022/07/04 09:58:38 by aer-razk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	check_redirection(char **table)
@@ -41,10 +53,8 @@ int	check_redirection_index(char **table, int index, int k)
 
 void	error_dup(int *fd, int i)
 {
-	(void) i;
-	(void) fd;
-	dup2(g_data.fd_i[1], 1);
-	dup2(g_data.fd_i[0], 0);
+	dup2(fd[i], 1);
+	dup2(fd[i + 1], 0);
 }
 
 int	here_check(char **str)

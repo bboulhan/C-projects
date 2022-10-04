@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 01:44:23 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/07/03 04:52:42 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/07/04 21:16:11 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,36 +17,38 @@ void	*ft_error(int Er, char **table, char *str)
 	if (Er == 1)
 		printf("Error\n");
 	else if (Er == 2)
-		printf(ANSI_COLOR_RED "command not found\n" ANSI_COLOR_RESET);
+		printf(CRED "do3afa2-1.0: command not found\n" RC);
 	else if (Er == 3)
-		printf(ANSI_COLOR_RED "syntax error\n" ANSI_COLOR_RESET);
+		printf(CRED "do3afa2-1.0: syntax error\n" RC);
 	else if (Er == 4)
-		printf(ANSI_COLOR_RED "do3afa2: quote not closed \n" ANSI_COLOR_RESET);
+		printf(CRED "do3afa2-1.0: quote not closed \n" RC);
 	else if (Er == 5)
-		printf(ANSI_COLOR_RED "syntax error near unexpected token `||'\n" ANSI_COLOR_RESET);
+		printf(CRED "do3afa2-1.0: syntax error near unexpected token `||'\n" RC);
 	if (table)
 		ft_free(table);
 	if (str)
 		free(str);
+	g_data.exit_status = 258;
 	return (NULL);
 }
 
-int ft_error_2(int Er, char **table, char *str)
+int	ft_error_2(int Er, char **table, char *str)
 {
 	if (Er == 1)
 		printf("Error\n");
 	else if (Er == 2)
-		printf(ANSI_COLOR_RED "command not found\n" ANSI_COLOR_RESET);
+		printf(CRED "do3afa2-1.0: command not found\n" RC);
 	else if (Er == 3)
-		printf(ANSI_COLOR_RED "syntax error\n" ANSI_COLOR_RESET);
+		printf(CRED "do3afa2-1.0: syntax error\n" RC);
 	else if (Er == 4)
-		printf(ANSI_COLOR_RED "do3afa2: quote not closed \n" ANSI_COLOR_RESET);
+		printf(CRED "do3afa2-1.0: quote not closed \n" RC);
 	else if (Er == 5)
-		printf(ANSI_COLOR_RED "syntax error near unexpected token `||'\n" ANSI_COLOR_RESET);
+		printf(CRED "do3afa2-1.0: syntax error near unexpected token `||'\n" RC);
 	if (table)
 		ft_free(table);
 	if (str)
 		free(str);
+	g_data.exit_status = 258;
 	return (0);
 }
 
@@ -86,33 +88,4 @@ void	init_node(t_list *node)
 	node->str = NULL;
 	node->table = NULL;
 	node->red_args = NULL;
-}
-
-
-void	print(t_list *node)
-{
-	int	i;
-
-	i = -1;
-	while (node)
-	{
-		printf("%s\n", node->cmd);
-		printf("||||||||||||\n");
-		while (node->args[++i])
-			printf("%s\n", node->args[i]);
-		i = -1;
-		//printf("*************************\n");
-		if (node->red_args)
-		{
-			while (node->red_args[++i])
-				printf("*%s\n", node->red_args[i]);
-		}
-		// i = -1;
-		// while (node->table[++i])
-		// 	printf("%s\n", node->table[i]);
-		//printf("%s\n" ,node->args_index);
-		i = -1;
-		printf("--------------------\n");
-		node = node->next;
-	}
 }

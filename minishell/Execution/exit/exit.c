@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 09:55:40 by aer-razk          #+#    #+#             */
+/*   Updated: 2022/07/04 20:06:35 by aer-razk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 int	ft_atoi(const char *str)
@@ -48,20 +60,28 @@ int	ft_isntdigit(char *arv)
 	return (-1);
 }
 
+void	numeric_args(t_list *table)
+{
+	printf("exit: numeric argument required: %s\n", table->args[1]);
+	exit(255);
+}
+
+void	too_many_args(void)
+{
+	printf("exit: too many arguments\n");
+	exit(1);
+}
+
 void	ft_exit(t_list *table)
 {
 	printf("exit\n");
 	if (table->args[1] && ft_isntdigit(table->args[1]) != -1)
-	{
-		printf("exit: numeric argument required: %s\n", table->args[1]);
-		exit(255);
-	}
-	if (ft_strlen_2(table->args) > 2)
-	{
-		printf("exit: too many arguments\n");
-		exit(1);
-	}
-	if (table->args[1] && ft_atoi(table->args[1]) >= 0)
+		numeric_args(table);
+	if (ft_strlen_2(table->args) > 2 && ft_isntdigit(table->args[1]) != -1)
+		too_many_args();
+	if (ft_strlen_2(table->args) > 2 && ft_isntdigit(table->args[1]) == -1)
+		too_many_args_2();
+	else if (table->args[1] && ft_atoi(table->args[1]) >= 0)
 	{
 		if (ft_atoi(table->args[1]) > 255)
 			exit(ft_atoi(table->args[1]) % 256);
@@ -75,5 +95,6 @@ void	ft_exit(t_list *table)
 		else
 			exit(256 - ((ft_atoi(table->args[1]) * -1) % 256));
 	}
-	exit(0);
+	else
+		exit(0);
 }

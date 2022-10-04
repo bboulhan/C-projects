@@ -1,89 +1,75 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   red_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 09:58:42 by aer-razk          #+#    #+#             */
+/*   Updated: 2022/07/04 21:55:18 by aer-razk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-
-
-	void	had(int sig_num)
-	{
-		char *s;
-
-		s = NULL;
-		if (sig_num == SIGINT)
-		{
-			//write(0, EOF, 1);
-			//printf("\n");
-			// rl_replace_line("", 0);
-			// rl_on_new_line();
-			g_data.d = 1;
-		}
-	}
 
 void	here_doc(char *arg, int *fd, int k, int i)
 {
-	//char	*str;
+	char	*str;
 	int		pid;
-	int		status;
-	int		fg[2];
-	int		bg[2];
 
-	g_data.d = 0;
-	g_data.str = ft_strdup("herdoc");
-	fd[k] = open("/tmp/heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	str = ft_strdup("herdoc");
+	fd[k] = open("/tmp/heredoc", O_RDWR | O_CREAT | O_TRUNC, 0777);
+	g_data.sig_q = 2;
 	pid = fork();
-	fg[0] = dup(0);
-	fg[1] = dup(1);
-	// bg[0] = dup(0);
-	// bg[1] = dup(1);
-	//printf("%d\t%d\t%d\t%d\n", fg[0], fg[1], bg[0], bg[1]);
 	if (pid == 0)
 	{
-		signal(SIGINT, had);
-		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		error_dup(fd, i);
-		if (g_data.d == 1)
-			exit(0);
-		while (ft_strncmp(arg, g_data.str, ft_strlen(g_data.str)) != 0)
+		while (ft_strncmp(arg, str, ft_strlen(str)) != 0)
 		{
-			free(g_data.str);
-			g_data.str = readline(">");
-			if (g_data.str == NULL || g_data.str[0] == 0)
+			free(str);
+			str = short_readline();
+			if (str == NULL)
 				exit(0);
-			write_str(g_data.str, fd[k], arg);
-			if (g_data.d == 1)
-				exit(0);
+			write_str(str, fd[k], arg);
 		}
 		exit(1);
 	}
-	g_data.d = 0;
-	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status))
-		g_data.signal = 1;
-	close(fd[k]);
-	fd[k] = open("/tmp/heredoc", O_RDONLY, 0777);
-	dup2(fd[k], 0);
-	bg[0] = fd[k];
-	dup2(fg[0], bg[0]);
-	close(fd[k]);
+	here_doc2(pid, fd[k], str);
 }
 
 void	redirect_input(int *fd, int k, char **str, int j)
 {
-	fd[k] = open(str[j + 1], O_RDWR, 0777);
+	char	*tmp;
+	char	c[2];
+
+	c[0] = '"';
+	c[1] = 0;
+	tmp = put_arg(str[j + 1]);
+	fd[k] = open(tmp, O_RDWR, 0777);
 	if (fd[k] == -1)
 		error_dup(fd, check_redirection(str));
 	else if (fd[k] != -1)
 		dup2(fd[k], 0);
 	close(fd[k]);
+	free(tmp);
 }
 
 void	redirect_output(int i, int *fd, int k, char *arg)
 {
+	char	*tmp;
+	char	c[2];
+
+	c[0] = '"';
+	c[1] = 0;
+	tmp = put_arg(arg);
 	if (i == 0)
-		fd[k] = open(arg, O_RDWR | O_CREAT | O_TRUNC, 0777);
+		fd[k] = open(tmp, O_RDWR | O_CREAT | O_TRUNC, 0777);
 	else if (i == 1)
-		fd[k] = open(arg, O_RDWR | O_CREAT | O_APPEND, 0777);
+		fd[k] = open(tmp, O_RDWR | O_CREAT | O_APPEND, 0777);
 	dup2(fd[k], 1);
 	close(fd[k]);
+	free(tmp);
 }
 
 int	check_fd(int *fd, int k, char **str, int c)
@@ -97,14 +83,17 @@ int	check_fd(int *fd, int k, char **str, int c)
 		{
 			if (c == 0)
 			{
-				printf(ANSI_COLOR_RED "do3afa2: %s:no such file or directory\n"
-					ANSI_COLOR_RESET, str[(i * 2) + 1]);
+				printf(CRED "do3afa2: %s:no such file or directory\n"
+					RC, str[(i * 2) + 1]);
 				g_data.exit_status = 1;
+				free(fd);
 			}
 			return (0);
 		}
 		i++;
 	}
+	if (c == 0)
+		free(fd);
 	return (count_red(k, str));
 }
 
@@ -121,7 +110,7 @@ int	simulate_redirection(t_list *node)
 	fd = save_dup_malloc(i);
 	if (i != 0)
 	{
-		while (++k < i && g_data.signal != 1)
+		while (++k < i)
 		{
 			j = check_redirection_index(node->red_args, j, k);
 			if (check_fd(fd, i, node->red_args, 1) && ouble(node->red_args[j]))

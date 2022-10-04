@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 09:55:44 by aer-razk          #+#    #+#             */
+/*   Updated: 2022/07/04 20:08:52 by aer-razk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 char	*getmyenv(char *str, char **env)
@@ -6,6 +18,14 @@ char	*getmyenv(char *str, char **env)
 	char	*s;
 
 	s = ft_calloc(1, 1);
+	if (str[0] == '?')
+	{
+		free(s);
+		s = ft_itoa(g_data.exit_status);
+		return (s);
+	}
+	else if (ft_isalnum(str[0]))
+		return (s);
 	i = check_table(env, str);
 	if (i != -1)
 	{
@@ -38,4 +58,42 @@ int	find_equal(char *table)
 	while (table[i] && table[i] != '=' && table[i] != '+')
 		i++;
 	return (i);
+}
+
+int	check_args(char *arg)
+{
+	int	j;
+
+	j = -1;
+	while (arg[++j]
+		&& ((arg[j] != '=' && (arg[j] != '+' || arg[j + 1] != '=')) || j == 0))
+	{
+		if (j == 0 && ft_isalpha1(arg[j]) == 0)
+			return (-1);
+		else if ((j != 0 && ft_isalpha2(arg[j]) == 0))
+			return (-1);
+	}
+	if (ft_strlen(arg) == 0)
+		return (-1);
+	return (1);
+}
+
+int	check_table(char **table, char *arg)
+{
+	int		i;
+	char	*str;
+	char	*str1;
+
+	i = -1;
+	while (table[++i])
+	{
+		str = ft_substr(table[i], 0, find_equal(table[i]));
+		str1 = ft_substr(arg, 0, find_equal(arg));
+		if (ft_strncmp(str, str1, find_equal(table[i])) == 0
+			&& find_equal(table[i]) == find_equal(arg))
+			return (free(str), free(str1), i);
+		free(str);
+		free(str1);
+	}
+	return (-1);
 }

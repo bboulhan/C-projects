@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pip.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 09:56:31 by aer-razk          #+#    #+#             */
+/*   Updated: 2022/07/04 21:05:45 by aer-razk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	nodelen(t_list *node)
@@ -82,28 +94,17 @@ void	pipeit(t_list *node, t_env *table)
 	int		i;
 
 	fd = fdalloc(node, &table->d);
-	pipe_all(table->d, fd);
-	i = -1;
-	g_data.sig_i = 1;
-	g_data.sig_q = 1;
-	while (node && ++i >= 0 && g_data.signal != 1)
+	pipe_all(table->d, fd, &i);
+	sigs(1);
+	while (node && ++i >= 0 && g_data.signal == 0)
 	{
 		if (node->next || i != 0)
 		{
 			pid = fork();
 			if (pid == 0)
-			{
-				signal(SIGINT, SIG_DFL);
-				signal(SIGQUIT, SIG_DFL);
-				red_dup_bulttins(fd, i, node, table);
-			}
-			if (g_data.signal == 1)
-			{
-				dup2(g_data.fd_i[1], 1);
-				dup2(g_data.fd_i[0], 0);
-			}
+				sigs2(fd, i, node, table);
 			if (here_check(node->red_args) == 1)
-				waitpid(pid, NULL, 0);
+				wait_and_study(pid);
 		}
 		if (!node->next && i != 0)
 			last_node(fd, pid, table->d);
@@ -111,6 +112,6 @@ void	pipeit(t_list *node, t_env *table)
 			one_node(node, table, fd[0]);
 		node = node->next;
 	}
-	g_data.sig_i = 0;
-	g_data.sig_q = 0;
+	ft_free_int(fd);
+	sigs(0);
 }
